@@ -63,8 +63,11 @@ public class ManagerController {
     }
 
     @RequestMapping("show-add-expenses")
-    public String showAddExpenses(Model model){
+    public String showAddExpenses(HttpSession session, Model model){
         model.addAttribute(MODE, "MODE_ADD_EXPENSES");
+        int user = (int)session.getAttribute("user");
+        Transaction transaction = transactionService.findLastTransactionByUser(user);
+        model.addAttribute("capital", getCurrentCapital(transaction));
         return "mainpage";
     }
 

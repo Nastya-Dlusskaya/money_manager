@@ -11,19 +11,19 @@
     <meta http-equiv="Expires" content="sat, 01 Dec 2001 00:00:00 GMT">
     <title>Home</title>
     <link href="static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="static/css/bootstrap-grid.min.css" rel="stylesheet">
-    <link href="static/css/bootstrap-reboot.min.css" rel="stylesheet">
 </head>
 <body>
-<div role="navigation">
-    <div class="navbar navbar-expand-sm bg-primary navbar-dark">
-        <a href="/login" class="navbar-brand">M$n$ger</a>
-        <ul class="navbar-nav">
-            <li class="nav-item"><a href="/show-login">Log in</a></li>
-            <li class="nav-item"><a href="/">Register</a></li>
-        </ul>
-    </div>
-</div>
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <a href="/login" class="navbar-brand">M$n$ger</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a href="/show-login" class="nav-link">Log in</a>
+        </li>
+        <li class="nav-item">
+            <a href="/" class="nav-link">Register</a>
+        </li>
+    </ul>
+</nav>
 <div class="container">
     <div class="jumbotron text-center">
         <c:choose>
@@ -39,25 +39,25 @@
                     <input type="hidden" name="id" value="${user.id}">
                     <div class="form-group">
                         <label class="control-label col-md-3">Surname</label>
-                        <div class="col-md-7">
+                        <div class="col-md-12">
                             <input type="text" class="form-control" name="surname">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3">Name</label>
-                        <div class="col-md-7">
+                        <div class="col-md-12">
                             <input type="text" class="form-control" name="name">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3">Login</label>
-                        <div class="col-md-7">
+                        <div class="col-md-12">
                             <input type="text" class="form-control" name="login">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-md-3">Password</label>
-                        <div class="col-md-7">
+                        <div class="col-md-12">
                             <input type="text" class="form-control" name="password">
                         </div>
                     </div>
@@ -77,13 +77,13 @@
                     </c:if>
                     <div class="form-group">
                         <label class="col-md-3">Login</label>
-                        <div class="col-md-7">
+                        <div class="col-md-12">
                             <input type="text" class="form-control" name="login">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3">Password</label>
-                        <div class="col-md-7">
+                        <div class="col-md-12">
                             <input type="password" class="form-control" name="password">
                         </div>
                     </div>
