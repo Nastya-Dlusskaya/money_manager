@@ -21,6 +21,19 @@ import java.util.Date;
 public class ManagerController {
 
     private static final String MODE = "mode";
+    private static final String INVALID_LOGIN_OR_PASSWORD = "Invalid login or password";
+    private static final String MODE_REGISTER = "MODE_REGISTER";
+    private static final String WELCOMEPAGE = "welcomepage";
+    private static final String MODE_LOGIN = "MODE_LOGIN";
+    private static final String AN_OBJECT = "+";
+    private static final String MODE_ADD_EXPENSES = "MODE_ADD_EXPENSES";
+    private static final String MODE_HOME = "MODE_HOME";
+    private static final String TRANSACTIONS = "transactions";
+    private static final String MAINPAGE = "mainpage";
+    private static final String CAPITAL = "capital";
+    private static final String USER = "user";
+    private static final String MODE_ADD_INCOME = "MODE_ADD_INCOME";
+    private static final String ERROR = "error";
 
     @Autowired
     private UserService userService;
@@ -29,102 +42,102 @@ public class ManagerController {
 
     @RequestMapping("/")
     public String welcome(Model model) {
-        model.addAttribute(MODE, "MODE_REGISTER");
-        return "welcomepage";
+        model.addAttribute(MODE, MODE_REGISTER);
+        return WELCOMEPAGE;
     }
 
     @RequestMapping("main")
     public String home(@ModelAttribute User user, Model model, HttpSession session){
         User foundUser = userService.findByLoginAndPassword(user.getLogin(), user.getPassword());
         if(foundUser != null){
-            model.addAttribute(MODE, "MODE_HOME");
-            session.setAttribute("user", foundUser.getId());
-            model.addAttribute("transactions", transactionService.findAllByUser(foundUser.getId()));
-            return "mainpage";
+            model.addAttribute(MODE, MODE_HOME);
+            session.setAttribute(USER, foundUser.getId());
+            model.addAttribute(TRANSACTIONS, transactionService.findAllByUser(foundUser.getId()));
+            return MAINPAGE;
         }
-        model.addAttribute("error", "Invalid login or password");
-        model.addAttribute(MODE, "MODE_LOGIN");
-        return "welcomepage";
+        model.addAttribute(ERROR, INVALID_LOGIN_OR_PASSWORD);
+        model.addAttribute(MODE, MODE_LOGIN);
+        return WELCOMEPAGE;
     }
 
     @RequestMapping("show-login")
     public String login(Model model){
-        model.addAttribute(MODE, "MODE_LOGIN");
-        return "welcomepage";
+        model.addAttribute(MODE, MODE_LOGIN);
+        return WELCOMEPAGE;
     }
 
     @RequestMapping("show-add-income")
     public String showAddIncome(HttpSession session,  Model model){
-        model.addAttribute(MODE, "MODE_ADD_INCOME");
-        int user = (int)session.getAttribute("user");
+        model.addAttribute(MODE, MODE_ADD_INCOME);
+        int user = (int)session.getAttribute(USER);
         Transaction transaction = transactionService.findLastTransactionByUser(user);
-        model.addAttribute("capital", getCurrentCapital(transaction));
-        return "mainpage";
+        model.addAttribute(CAPITAL, getCurrentCapital(transaction));
+        return MAINPAGE;
     }
 
     @RequestMapping("show-add-expenses")
     public String showAddExpenses(HttpSession session, Model model){
-        model.addAttribute(MODE, "MODE_ADD_EXPENSES");
-        int user = (int)session.getAttribute("user");
+        model.addAttribute(MODE, MODE_ADD_EXPENSES);
+        int user = (int)session.getAttribute(USER);
         Transaction transaction = transactionService.findLastTransactionByUser(user);
-        model.addAttribute("capital", getCurrentCapital(transaction));
-        return "mainpage";
+        model.addAttribute(CAPITAL, getCurrentCapital(transaction));
+        return MAINPAGE;
     }
 
     @PostMapping("save-user")
     public String registerUser(@ModelAttribute@Valid User user, Errors errors, Model model){
         if(errors.hasErrors()){
-            model.addAttribute("error", errors.getFieldErrors());
-            model.addAttribute(MODE, "MODE_REGISTER");
-            return "welcomepage";
+            model.addAttribute(ERROR, errors.getFieldErrors());
+            model.addAttribute(MODE, MODE_REGISTER);
+            return WELCOMEPAGE;
         }
         userService.saveUser(user);
-        model.addAttribute(MODE, "MODE_HOME");
-        return "mainpage";
+        model.addAttribute(MODE, MODE_HOME);
+        return MAINPAGE;
     }
 
     @PostMapping("add-income")
     public String addIncome(@ModelAttribute@Valid Transaction transaction, Errors errors,
                             Model model, HttpSession session){
         if(errors.hasErrors()){
-            model.addAttribute("error", errors.getFieldErrors());
-            model.addAttribute(MODE, "MODE_ADD_INCOME");
-            int user = (int)session.getAttribute("user");
+            model.addAttribute(ERROR, errors.getFieldErrors());
+            model.addAttribute(MODE, MODE_ADD_INCOME);
+            int user = (int)session.getAttribute(USER);
             Transaction lastTransaction = transactionService.findLastTransactionByUser(user);
-            model.addAttribute("capital", getCurrentCapital(lastTransaction));
-            return "mainpage";
+            model.addAttribute(CAPITAL, getCurrentCapital(lastTransaction));
+            return MAINPAGE;
         }
-        int user = (int)session.getAttribute("user");
+        int user = (int)session.getAttribute(USER);
         transaction.setDate(new Date());
         transaction.setUser(user);
         transactionService.saveUser(transaction);
-        model.addAttribute("transactions", transactionService.findAll());
-        model.addAttribute(MODE, "MODE_HOME");
-        return "mainpage";
+        model.addAttribute(TRANSACTIONS, transactionService.findAll());
+        model.addAttribute(MODE, MODE_HOME);
+        return MAINPAGE;
     }
 
     @PostMapping("add-expenses")
     public String addExpenses(@ModelAttribute@Valid Transaction transaction, Errors errors, Model model, HttpSession session){
         if(errors.hasErrors()){
-            model.addAttribute("error", errors.getFieldErrors());
-            model.addAttribute(MODE, "MODE_ADD_EXPENSES");
-            int user = (int)session.getAttribute("user");
+            model.addAttribute(ERROR, errors.getFieldErrors());
+            model.addAttribute(MODE, MODE_ADD_EXPENSES);
+            int user = (int)session.getAttribute(USER);
             Transaction lastTransaction = transactionService.findLastTransactionByUser(user);
-            model.addAttribute("capital", getCurrentCapital(lastTransaction));
-            return "mainpage";
+            model.addAttribute(CAPITAL, getCurrentCapital(lastTransaction));
+            return MAINPAGE;
         }
-        int user = (int)session.getAttribute("user");
+        int user = (int)session.getAttribute(USER);
         transaction.setDate(new Date());
         transaction.setUser(user);
         transactionService.saveUser(transaction);
-        model.addAttribute("transactions", transactionService.findAll());
-        model.addAttribute(MODE, "MODE_HOME");
-        return "mainpage";
+        model.addAttribute(TRANSACTIONS, transactionService.findAll());
+        model.addAttribute(MODE, MODE_HOME);
+        return MAINPAGE;
     }
 
     private BigDecimal getCurrentCapital(Transaction transaction){
         BigDecimal capital;
-        if(transaction.getType().equals("+")){
+        if(transaction.getType().equals(AN_OBJECT)){
             capital = transaction.getCapital().add(transaction.getSum());
         } else{
             capital = transaction.getCapital().subtract(transaction.getSum());
@@ -132,4 +145,10 @@ public class ManagerController {
         return capital;
     }
 
+    @RequestMapping("logout")
+    private String logout(HttpSession session, Model model){
+        session.removeAttribute(USER);
+        model.addAttribute(MODE, MODE_LOGIN);
+        return WELCOMEPAGE;
+    }
 }

@@ -27,7 +27,7 @@
                 <a href="show-add-expenses" class="nav-link"><span class="glyphicon glyphicon-minus"></span>Add Expenses</a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link"><span class="glyphicon glyphicon--log-out"></span> Log out</a>
+                <a href="logout" class="nav-link"><span class="glyphicon glyphicon--log-out"></span> Log out</a>
             </li>
         </ul>
     </div>
